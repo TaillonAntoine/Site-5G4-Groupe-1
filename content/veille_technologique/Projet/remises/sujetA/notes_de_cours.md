@@ -86,6 +86,62 @@ Ensuite pour lancer le débogueur, il faut faire quelque étapes supplémentaire
 - Dans la configuration générée, il est nécessaire d’ajouter le chemin correct vers vos exécutables Rust. Cela garantit que le débogueur sait où trouver le binaire compilé par Cargo. Sans cette étape, le débogage risque de ne pas fonctionner correctement :
   ![alt text](../chemin.png)
 
+## Introduction du langage
+
+Rust est conçu pour offrir performances de bas niveau comparables à C/C++ tout en garantissant, à la compilation, l’absence de data races et de nombreux bugs mémoire (use-after-free, double-free, invalid aliasing). Il réalise cette promesse via un système d’ownership, d’emprunts, et un borrow checker strict, sans garbage collector. L’ergonomie moderne (pattern matching, traits, generics, tooling intégré) rend viable des projets industriels et pédagogiques.
+
+## Fondement: ownership, borrows, lifetime
+
+- **Ownership** : Chaque valeur a un propriétaire unique. Le move transfère la propriété; la copie est explicite (via Copy ou clone()).
+- **Borrowing** : &T (immutable borrow) peut avoir plusieurs emprunts simultanés, &mut T (mutable borrow) doit être unique. Cette règle prévient les conflits d'accès condurrent.
+- **Lifetime** : Le compilateur infère souvent les durées de vie; l’annotation explicite ('a) garantit que les références ne survivent pas à leurs données.
+
+Exemple de code d'emprun:
+
+```rust
+fn main() {
+    let a = String::from("hello");
+    let b = &a;          // emprunt immuable
+    let mut c = String::from("world"); // emprunt mutable unique
+    let d = &mut c;
+    d.push_str("!");
+    // b.push_str(","); peut pas faire ceci puisque c'est une reference non mutable
+    println!("{} {}", b, d);
+}
+```
+
+Alias mutables interdits deux &mut simultanés vers la même donnée sont refusés. On obtient contrôle local des invariants.
+
+## Type, traits, generics et enums
+
+Enums + pattern matching : le match est expressif et le compilateur vérifie que tous les cas sont couverts (exhaustivité).
+
+```rust
+fn main() {
+    let msg1 = Msg::Quitter;
+    let msg2 = Msg::Mouvement { x: 10, y: 20 };
+    let msg3 = Msg::Text(String::from("bonjour"));
+    handle(msg1);
+    handle(msg2);
+    handle(msg3);
+}
+
+enum Msg {
+    Quitter,
+    Mouvement {x: i32, y: i32},
+    Text(String)
+}
+
+fn handle(msg: Msg) {
+    // ici il s'assure que tu as tout les enum du Msg, sinon il y a une erreur de compilation
+    match msg {
+        Msg::Quitter => println!("bye"),
+        Msg::Mouvement { x, y } => println!("mouvement {x}, {y}"),
+        Msg::Text(t) => println!("text: {t}"),
+    }
+}
+```
+
 ## Source
 
 - https://www.youtube.com/watch?v=ZhedgZtd8gw
