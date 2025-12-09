@@ -7,6 +7,8 @@ weight = 2
 
 Aller sur ce site et installer la version x64 de Rust : [ici](https://rust-lang.org/fr/learn/get-started/)
 
+Pendant l'installation faite y, puis enter, puis enter
+
 Ensuite faire le commande suivant pour vérifier que l'installation à bien fonctionnée :
 
 ![alt text](../rust_version.png)
