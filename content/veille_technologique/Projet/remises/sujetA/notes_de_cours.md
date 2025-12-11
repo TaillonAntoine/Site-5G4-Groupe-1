@@ -92,6 +92,50 @@ Ensuite pour lancer le débogueur, il faut faire quelque étapes supplémentaire
 
 Rust est conçu pour offrir performances de bas niveau comparables à C/C++ tout en garantissant, à la compilation, l’absence de data races et de nombreux bugs mémoire (use-after-free, double-free, invalid aliasing). Il réalise cette promesse via un système d’ownership, d’emprunts, et un borrow checker strict, sans garbage collector. L’ergonomie moderne (pattern matching, traits, generics, tooling intégré) rend viable des projets industriels et pédagogiques.
 
+## Premier programme
+
+Le premier programme typique, Hello word! :
+
+```rust
+fn main() {
+    println!("Hello world!");
+}
+```
+
+## Explication du code
+
+```rust
+println!("Hello world!");
+```
+
+On écrit println!("Hello world!") (avec point d’exclamation). Ici, println! est une macro, pas une fonction. Les macros en Rust permettent de générer du code à la compilation (elles sont plus puissantes que de simples fonctions).
+
+## Q'est ce que des Macros?
+
+Rust utilise des macros (reconnaissables au point d’exclamation !) pour agir directement sur la syntaxe avant la vérification des types et du système d’emprunt. Contrairement aux fonctions, les macros peuvent :
+
+- Accepter un nombre variable d’arguments.
+- Inspecter leur structure syntaxique.
+- Générer du code au moment de la compilation.
+
+**Voici un exemple avec println!** :
+
+```rust
+let a = "bonjour";
+let b = 2.1;
+let c = 2;
+let d = true;
+println!("a = {} / b = {} / c = {} / d = {}", a,b,c,d)
+```
+
+**Affichage** :
+
+```cmd
+a = bonjour / b = 2.1 / c = 2 / d = true
+```
+
+Dans ce code nous avons un string, un float, un int et un boolan. Les variables sont définies automatiquement, et à l'affichage, pas besoin de faire la gestion des types, elle se fait aussi automatiquement grace au macro. Vous pouvez aussi notez que chaque variable est associer à son {}. L'association se fait en ordre avec les variables, donc le premier {} affiche la première variable qui est a insi de suite...
+
 ## Fondement: ownership, borrows, lifetime
 
 - **Ownership** : Chaque valeur a un propriétaire unique. Le move transfère la propriété; la copie est explicite (via Copy ou clone()).

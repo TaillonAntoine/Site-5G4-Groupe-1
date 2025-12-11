@@ -13,6 +13,8 @@ Le seul point qui est moins bien des LLM c'est qu'ils vont donner ce que tu dema
 
 **Ce site contient tous les informations à propos de Rust** : [Rust](https://doc.rust-lang.org/book/)
 
+**Article concernant Rust** : [article](https://www.ambient-it.net/rust-guide-complet/)
+
 **Puisque je ne connais pas Rust, je vais demander à copilote de m'en parler**
 
 **Premier prompt** :
