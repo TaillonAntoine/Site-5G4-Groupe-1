@@ -9,6 +9,12 @@ Copilote : Smart (GPT-5)
 
 Un LLM est vraiment mieux qu'un moteur de recherche pour apprendre de nouveaux sujets. Un moteur de recherche va simplement prendre un prompte à la fois et répondre avec des liens, tandis qu'un LLM va te l'expliquer et tu peux lui préciser ce que tu veux qu'il te dise. Avec un LLM c'est une discussion et non plusieurs demandes sans historique. En plus, mon moteur de recherche me donne parfois des réponses par LLM directement aussi, donc même dans mon moteur de recherche, il y a un LLM qui me répond parfois.
 
+Le seul point qui est moins bien des LLM c'est qu'ils vont donner ce que tu demandes, mais tu ne peux pas demander ce que tu ne sais pas, comme le site suivant qui contient tous les informations nécessaire à comprendre Rust, tu ne peux pas savoir et demander d'expliquer des conceptes en lien avec Rust sans savoir et comprendre Rust.
+
+**Ce site contient tous les informations à propos de Rust** : [Rust](https://doc.rust-lang.org/book/)
+
+**Puisque je ne connais pas Rust, je vais demander à copilote de m'en parler**
+
 **Premier prompt** :
 Donne-moi une vue d’ensemble et à jour du langage Rust pour des étudiants de 5e session en informatique qui ne connaissent pas Rust.
 

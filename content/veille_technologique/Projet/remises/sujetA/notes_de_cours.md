@@ -150,3 +150,9 @@ fn handle(msg: Msg) {
 - https://rust-lang.org/fr/learn/get-started/
 - https://certiquizz.com/fr/cours/programmation/rust/rust-de-zero-a-operationnel/installation-et-configuration-de-l-environnement-de-developpement#:~:text=C%27est%20un%20installateur%20de%20toolchains%20Rust%20qui%20vous,versions%20de%20Rust%20%28stable%2C%20beta%2C%20nightly%29%20si%20n%C3%A9cessaire.
 - https://learn.microsoft.com/fr-fr/windows/dev-environment/rust/overview
+- https://learn.microsoft.com/en-us/windows/dev-environment/rust/setup
+- https://stackoverflow.com/questions/68424927/cargo-missing-from-path-in-vscode-powershell
+- https://code.visualstudio.com/docs/terminal/profiles
+- https://github.com/microsoft/vscode/issues/212062
+- https://github.com/rust-lang/rustup/issues/846
+- https://stackoverflow.com/questions/47379214/step-by-step-instruction-to-install-rust-and-cargo-for-mingw-with-msys2
