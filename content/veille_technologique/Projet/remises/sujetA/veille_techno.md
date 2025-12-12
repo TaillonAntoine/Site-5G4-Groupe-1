@@ -83,7 +83,7 @@ Peux tu me dire les forces et les faiblesses de Rust
 - Communauté active : Rust est régulièrement classé parmi les langages les plus appréciés par les développeurs (Stack Overflow Survey)
 - Polyvalence : utilisé dans les systèmes embarqués, le développement web (Actix, Rocket), la cybersécurité et les infrastructures cloud
 
-## Faibless de Rust
+## Faiblesse de Rust
 
 - Courbe d’apprentissage abrupte : le modèle d’ownership et le borrow checker sont difficiles à maîtriser pour les débutants
 - Temps de compilation longs : comparé à C ou Go, Rust peut ralentir le cycle de développement

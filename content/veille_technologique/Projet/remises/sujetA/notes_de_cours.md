@@ -134,7 +134,170 @@ println!("a = {} / b = {} / c = {} / d = {}", a,b,c,d)
 a = bonjour / b = 2.1 / c = 2 / d = true
 ```
 
-Dans ce code nous avons un string, un float, un int et un boolan. Les variables sont définies automatiquement, et à l'affichage, pas besoin de faire la gestion des types, elle se fait aussi automatiquement grace au macro. Vous pouvez aussi notez que chaque variable est associer à son {}. L'association se fait en ordre avec les variables, donc le premier {} affiche la première variable qui est a insi de suite...
+Dans ce code nous avons un string, un float, un int et un boolan. Les variables sont définies automatiquement, et à l'affichage, pas besoin de faire la gestion des types, elle se fait aussi automatiquement grace au macro. Vous pouvez aussi notez que chaque variable est associer à son {}. L'association se fait en ordre avec les variables, donc le premier {} affiche la première variable qui est a, insi de suite...
+
+## Écriture
+
+**Voici un exemple d'écriture** :
+
+```rust
+use std::io;
+fn main() {
+    let mut nom = String::new();
+
+    print!("Entrez votre nom : ");
+
+    io::stdin().read_line(&mut nom).expect("Erreur lors de la lecture");
+
+    print!("Bonjour {}!", nom);
+}
+```
+
+**Explication du code**
+
+```rust
+use std::io;
+```
+
+**std** est la bibliohtèque standard de Rust (abréviation de standard).
+**io** est le module qui gère les entrées/sorties (input/output), comme :
+
+- Lire au clavier (stdin)
+- Écrire à l’écran (stdout)
+- Écrire dans un fichier ou lire un fichier
+
+```rust
+let mut nom = String::new();
+```
+
+Par défaut, toutes les variables en Rust sont immuables (non modifiables), donc nous devons la déclarer mut pour être capable de la modifier en y ajoutant ce que l'utilisateur a écrit.Le mot‑clé **mut** rend une variable mutable, c’est‑à‑dire qu’on peut changer son contenu après l’initialisation.
+
+```rust
+print!("Entrez votre nom : ");
+```
+
+Ceci est un affichage avec print que vous êtes familiés.
+
+```rust
+io::stdin().read_line(&mut nom).expect("Erreur lors de la lecture");
+```
+
+**io::std()** : Accède à l’entrée standard (standard input), c’est‑à‑dire le clavier. Cela retourne un objet qui permet de lire ce que l’utilisateur tape.
+
+**read_line(&mut nom)** :
+
+- Demande à Rust de lire une ligne complète depuis le clavier.
+- Le texte saisi est ajouté dans la variable nom.
+- On passe &mut nom car :
+  - & → on donne une référence à la fonction (on ne copie pas la variable).
+  - mut → on autorise la fonction à modifier le contenu de nom.
+  - Sans mut, Rust refuserait car read_line doit écrire dans la variable.
+
+```rust
+print!("Bonjour {}!", nom);
+```
+
+Ensuite l'affichage.
+
+Par contre ce code a un petit soucie d'affichage. Voyon voir :
+
+```cmd
+antoine
+Entrez votre nom : Bonjour antoine
+!
+```
+
+Rust n’affiche pas forcément immédiatement le texte à l’écran. Pourquoi ? Parce que la sortie standard (stdout) est bufferisée :
+
+- Le texte est d’abord stocké dans une mémoire tampon (buffer).
+- Il n’est envoyé à l’écran qu’à certains moments (par exemple quand il y a un \n ou quand le buffer est plein).
+
+Résultat : si tu demandes une entrée juste après, il peut arriver que l’utilisateur ne voie pas l’invite avant de taper son texte.
+
+On peut le voir avec ce code :
+
+```rust
+use std::io;
+fn main() {
+    let mut nom = String::new();
+
+    println!("Entrez votre nom : ");
+
+    io::stdin().read_line(&mut nom).expect("Erreur lors de la lecture");
+
+    print!("Bonjour {}!", nom);
+}
+```
+
+```cmd
+Entrez votre nom :
+antoine
+Bonjour antoine
+!
+```
+
+Ici, le println! fait un retour de ligne après affichage. Par contre, l'écriture se fait en dessous, ce n'est pas ce qu'on veut non plus.
+
+Il faut ajouter ce code pour bien faire l'affichage :
+
+```rust
+use std::io::Write;
+std::io::stdout().flush().unwrap();
+```
+
+**use std::io::Write** :
+
+- En Rust, use sert à importer des modules ou des traits.
+- Ici, on importe le trait Write du module std::io.
+- Pourquoi ? Parce que la méthode .flush() est définie par ce trait.
+- Sans cette ligne, le compilateur ne saurait pas que stdout() peut utiliser .flush().
+
+**std::io::stdout().flush().unwrap()** :
+
+- std::io::stdout() donne accès à la sortie standard (stdout), c’est‑à‑dire l’écran.
+- .flush() force l’écriture immédiate du contenu du buffer vers l’écran.
+- Rust bufferise l’affichage pour des raisons de performance.
+- Par défaut, le texte n’est envoyé qu’au moment d’un saut de ligne (\n) ou quand le buffer est plein.
+- Avec .flush(), on dit : « Vide le buffer tout de suite, montre le texte maintenant. »
+
+**.unwrap() gère le Result retourné par .flush()**
+
+- Si tout va bien on continue.
+- Si une erreur survient le programme s’arrête avec un message d’erreur.
+- C’est une façon simple de dire « je ne veux pas gérer l’erreur autrement ».
+
+Il faut comprendre que quand on tape le nom comme antoine et que l'on fait "enter", rust rentre ceci dans la variable nom : **"antoine\n"**
+
+Pour remédier à ce problème il faut ajouter ce code :
+
+```rust
+let nom = nom.trim();
+```
+
+Voici le résultat final :
+
+```rust
+use std::io;
+fn main() {
+    let mut nom = String::new();
+
+    print!("Entrez votre nom : ");
+
+    use std::io::Write;
+    std::io::stdout().flush().unwrap();
+
+    io::stdin().read_line(&mut nom).expect("Erreur lors de la lecture");
+
+    let nom = nom.trim();
+
+    print!("Bonjour {}!", nom);
+}
+```
+
+```cmd
+Entrez votre nom : antoine
+Bonjour antoine!
+```
 
 ## Fondement: ownership, borrows, lifetime
 
@@ -146,47 +309,27 @@ Exemple de code d'emprun:
 
 ```rust
 fn main() {
-    let a = String::from("hello");
+    let a = "hello";
     let b = &a;          // emprunt immuable
     let mut c = String::from("world"); // emprunt mutable unique
     let d = &mut c;
     d.push_str("!");
     // b.push_str(","); peut pas faire ceci puisque c'est une reference non mutable
-    println!("{} {}", b, d);
+    println!("bonjour {} {}", b, d);
 }
 ```
 
-Alias mutables interdits deux &mut simultanés vers la même donnée sont refusés. On obtient contrôle local des invariants.
-
-## Type, traits, generics et enums
-
-Enums + pattern matching : le match est expressif et le compilateur vérifie que tous les cas sont couverts (exhaustivité).
+```cmd
+bonjour hello world!
+```
 
 ```rust
-fn main() {
-    let msg1 = Msg::Quitter;
-    let msg2 = Msg::Mouvement { x: 10, y: 20 };
-    let msg3 = Msg::Text(String::from("bonjour"));
-    handle(msg1);
-    handle(msg2);
-    handle(msg3);
-}
-
-enum Msg {
-    Quitter,
-    Mouvement {x: i32, y: i32},
-    Text(String)
-}
-
-fn handle(msg: Msg) {
-    // ici il s'assure que tu as tout les enum du Msg, sinon il y a une erreur de compilation
-    match msg {
-        Msg::Quitter => println!("bye"),
-        Msg::Mouvement { x, y } => println!("mouvement {x}, {y}"),
-        Msg::Text(t) => println!("text: {t}"),
-    }
-}
+let mut c = String::from("world");
+let d = &mut c;
+d.push_str("!");
 ```
+
+Comme expliquez plus tôt, les variables ne peuvent pas être modifier par défaut, pour être capable de les modifiées, il faut les déclarer avec **mut**. Ensuite, comme avec la déclaration de D, il faut utiliser **&mut** pour prendre la référence de la variable, puis la modifier. Pour ajouter ! on utilise **push_str**. Aussi, on utilise **&** pour pointer vers la référence de la variable comme en C++.
 
 ## Source
 
